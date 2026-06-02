@@ -3,6 +3,7 @@
   <div class="order-book dark">
     <!-- Текущая цена и спред — одной строкой -->
     <el-card v-if="hasSpread" class="summary">
+      <span class="summary__coin" aria-hidden="true">₿</span>
       <span class="summary__pair">BTC/USDT</span>
       <b class="summary__price">{{ formattedCoinPrice }}</b>
       <SpreadInfo :spread="spread" />
@@ -82,6 +83,22 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
   gap: 12px;
+}
+
+/* Иконка монеты BTC — оранжевый бейдж, как на Binance/Bybit */
+.summary__coin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #f7931a;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  margin-right: -4px;
 }
 
 .summary__pair {

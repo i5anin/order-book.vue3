@@ -11,7 +11,7 @@
             'buy-cell': type === 'buy'
           }"
         >
-          <span v-if="currency === 'btc'">
+          <span v-if="currency === 'btc'" class="num">
             <b>{{ formatPrice(row.price) }}</b>
           </span>
         </div>
@@ -19,16 +19,16 @@
       <template v-slot:header>Цена (BTC)</template>
     </el-table-column>
     <!-- Количество -->
-    <el-table-column prop="quantity">
+    <el-table-column prop="quantity" align="right">
       <template v-slot="{ row }">
-        <span v-if="row.quantity !== 0">{{ formatQuantity(row.quantity) }}</span>
+        <span v-if="row.quantity !== 0" class="num">{{ formatQuantity(row.quantity) }}</span>
       </template>
       <template v-slot:header>Количество</template>
     </el-table-column>
     <!-- Сумма -->
-    <el-table-column>
+    <el-table-column align="right">
       <template v-slot="{ row }">
-        <span v-if="row.price !== 0 && row.quantity !== 0">{{
+        <span v-if="row.price !== 0 && row.quantity !== 0" class="num">{{
           formatTotal(row.price, row.quantity)
         }}</span>
       </template>
@@ -105,5 +105,11 @@ export default defineComponent({
 /* Стили для таблицы */
 .order-table {
   width: 100%;
+}
+
+/* Моноширинные цифры — колонки выравниваются по разрядам, как на Binance/Bybit */
+.order-table .num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
 }
 </style>

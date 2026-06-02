@@ -1,6 +1,23 @@
-# [Демо версия сайта](https://order-btc-vue3.vercel.app/)
+# 📈 Order Book — биржевой стакан Binance
 
-## [Задание](./doc/README.md)
+Демо-приложение «биржевой стакан» (BTC/USDT) на **Vue 3 + TypeScript + Pinia + Vite**: подписка на стрим ордеров Binance, расчёт спреда и подсветка собственных ордеров.
+
+🔗 **[Живое демо](https://order-btc-vue3.vercel.app/)** · 📄 **[Описание задания](./doc/README.md)**
+
+## 🚀 Запуск
+
+```bash
+npm install      # установка зависимостей
+npm run dev      # дев-сервер Vite → http://localhost:8080
+```
+
+| Скрипт | Команда | Назначение |
+| --- | --- | --- |
+| `npm run dev` / `serve` | `vite` | дев-сервер с HMR |
+| `npm run build` | `vue-tsc -b && vite build` | проверка типов + прод-сборка в `dist/` |
+| `npm run preview` | `vite preview` | предпросмотр прод-сборки |
+| `npm run type-check` | `vue-tsc -b` | проверка типов TypeScript |
+| `npm run lint` | `eslint . --fix` | линтинг + автоисправление |
 
 ## Выполнены задачи:
 
