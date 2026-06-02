@@ -1,77 +1,96 @@
 <template>
-  <!-- Создание контейнера для отображения книги ордеров -->
+  <!-- Контейнер книги ордеров -->
   <div class="order-book dark">
-    <!-- Отображение информации о спреде -->
-    <el-card v-if="hasSpread" class="spread-info">
-      <b>{{ currentCoinPrice }}</b
-      ><SpreadInfo :spread="spread" />
+    <!-- Текущая цена и спред — одной строкой -->
+    <el-card v-if="hasSpread" class="summary">
+      <span class="summary__pair">BTC/USDT</span>
+      <b class="summary__price">{{ formattedCoinPrice }}</b>
+      <SpreadInfo :spread="spread" />
     </el-card>
-    <!-- Отображение спиннера загрузки -->
+
+    <!-- Спиннер загрузки -->
     <loading-spinner :loading="isLoading">
-      <!-- Заголовочная строка -->
-      <div class="header-row">
-        <div class="current-price"></div>
-      </div>
-      <!-- Отображение таблицы ордеров на продажу -->
+      <!-- Продажи (asks) — с шапкой -->
       <OrderTable
         :orders="asks"
         type="sell"
         :ourOrders="ourOrders"
         :currency="selectedCurrency"
-        :headerText="'Цена (BTC)'"
       />
-      <!-- Отображение таблицы ордеров на покупку -->
+      <!-- Покупки (bids) — без повторной шапки, колонки те же -->
       <OrderTable
         :orders="bids"
         type="buy"
         :ourOrders="ourOrders"
         :currency="selectedCurrency"
-        :headerText="currentCoinPrice"
+        :show-header="false"
       />
-      <!-- :headerText="[currentCoinPrice, spread]" -->
     </loading-spinner>
   </div>
 </template>
 
-<script>
-  // Импорт компонентов
-  import OrderTable from "@/components/OrderTable.vue";
-  import SpreadInfo from "@/components/SpreadInfo.vue";
-  import LoadingSpinner from "@/components/LoadingSpinner.vue";
-  import { mapGetters } from "vuex";
+<script lang="ts">
+import { defineComponent } from "vue";
+import { mapActions, mapState } from "pinia";
 
-  export default {
-    components: {
-      OrderTable,
-      SpreadInfo,
-      LoadingSpinner
-    },
-    // Определение данных компонента
-    data() {
-      return {
-        selectedCurrency: "btc"
-      };
-    },
-    // Определение вычисляемых свойств компонента
-    computed: mapGetters([
+import OrderTable from "@/components/OrderTable.vue";
+import SpreadInfo from "@/components/SpreadInfo.vue";
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
+import { useOrderBookStore } from "@/stores/orderBook";
+
+export default defineComponent({
+  components: {
+    OrderTable,
+    SpreadInfo,
+    LoadingSpinner
+  },
+  data() {
+    return {
+      selectedCurrency: "btc"
+    };
+  },
+  computed: {
+    // Стейт и геттеры стора (Pinia mapState отдаёт и то, и другое)
+    ...mapState(useOrderBookStore, [
       "isLoading",
       "hasSpread",
       "spread",
       "asks",
       "bids",
       "ourOrders",
-      "currentCoinPrice"
-    ]),
-
-    created() {
-      // Подписка на поток данных о книге ордеров
-      this.$store.dispatch("subscribeToOrderBookStream");
-    },
-    methods: {
-      refreshOrders() {
-        // Обновление ордеров
-        this.$store.dispatch("fetchOurOrders");
-      }
-    }
-  };
+      "formattedCoinPrice"
+    ])
+  },
+  created() {
+    // Подписка на поток данных о книге ордеров
+    this.subscribeToOrderBookStream();
+  },
+  methods: {
+    ...mapActions(useOrderBookStore, ["subscribeToOrderBookStream"])
+  }
+});
 </script>
+
+<style scoped>
+.summary {
+  margin-bottom: 6px;
+}
+
+/* Цена и спред в одну центрированную строку */
+.summary :deep(.el-card__body) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.summary__pair {
+  color: var(--el-text-color-secondary);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+.summary__price {
+  font-size: 18px;
+}
+</style>

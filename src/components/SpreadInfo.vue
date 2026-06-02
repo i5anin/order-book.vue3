@@ -1,31 +1,33 @@
 <template>
-  <!-- Отображение компонента информации о спреде -->
+  <!-- Информация о спреде -->
   <div class="spread" :class="{ red: spread > 0, green: spread < 0 }">
     Spread: <b>{{ formatSpread() }} %</b>
   </div>
 </template>
 
-<script>
-  export default {
-    props: {
-      // Определение свойства spread, которое ожидается в качестве числа и обязательно
-      spread: {
-        type: Number,
-        required: true
-      }
-    },
-    methods: {
-      // Метод для форматирования значения spread
-      formatSpread() {
-        return parseFloat(this.spread).toFixed(2);
-      }
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
+  props: {
+    // Значение спреда — число, обязательное
+    spread: {
+      type: Number,
+      required: true
     }
-  };
+  },
+  methods: {
+    // Форматирование значения спреда
+    formatSpread(): string {
+      return this.spread.toFixed(2);
+    }
+  }
+});
 </script>
 
 <style>
-  /* Стили для компонента информации о спреде */
-  .spread {
-    font-size: 16px;
-  }
+/* Стили для компонента информации о спреде */
+.spread {
+  font-size: 16px;
+}
 </style>

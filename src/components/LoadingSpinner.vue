@@ -14,11 +14,19 @@
   </div>
 </template>
 
-<script>
-  export default {
-    data() {
-      return {
-        svg: `
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
+  props: {
+    loading: {
+      type: Boolean,
+      required: true
+    }
+  },
+  data() {
+    return {
+      svg: `
         <path class="path" d="
           M 30 15
           L 28 17
@@ -28,22 +36,16 @@
           L 15 15
         " style="stroke-width: 4px; fill: rgba(0, 0, 0, 0)"/>
       `
-      };
-    },
-    props: {
-      loading: {
-        type: Boolean,
-        required: true
-      }
-    }
-  };
+    };
+  }
+});
 </script>
 
 <style>
-  .loading-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-  }
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
 </style>

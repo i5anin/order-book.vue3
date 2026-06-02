@@ -1,13 +1,13 @@
 import { createApp } from "vue";
-import App from "./App.vue";
-import store from "@/store/store.js";
+import { createPinia } from "pinia";
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
-
 import "element-plus/theme-chalk/dark/css-vars.css";
 
-// Создайте экземпляр приложения Vue и передайте хранилище в качестве опции
+import App from "./App.vue";
+
+// Создаём экземпляр приложения Vue, подключаем Pinia и Element Plus
 const app = createApp(App);
+app.use(createPinia());
 app.use(ElementPlus);
-app.use(store);
 app.mount("#app");
